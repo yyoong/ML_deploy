@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.impute import SimpleImputer
 from datetime import datetime
 
 # Load the dataset
@@ -104,9 +105,13 @@ X_encoded = pd.get_dummies(X, columns=['Education', 'Marital_Status'])
 if 'Dt_Customer' in X_encoded.columns:
     X_encoded['Dt_Customer'] = (X_encoded['Dt_Customer'] - min_date).dt.days
 
+# Impute missing values
+imputer = SimpleImputer(strategy='mean')
+X_imputed = imputer.fit_transform(X_encoded)
+
 # Fit GBM model on entire dataset
 try:
-    gbm_model.fit(X_encoded, y)
+    gbm_model.fit(X_imputed, y)
 except Exception as e:
     st.write(f"Error occurred during model training: {e}")
 
@@ -119,9 +124,12 @@ if st.button('Predict'):
     # Reorder columns to match X
     input_df_encoded = input_df_encoded[X_encoded.columns]
 
+    # Impute missing values in the input data
+    input_df_imputed = imputer.transform(input_df_encoded)
+
     # Predict using GBM model
     try:
-        prediction_gbm = gbm_model.predict(input_df_encoded)
+        prediction_gbm = gbm_model.predict(input_df_imputed)
         st.write(f'GBM Prediction: {prediction_gbm[0]}')
     except Exception as e:
         st.write(f"Error occurred during prediction: {e}")
