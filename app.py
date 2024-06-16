@@ -88,26 +88,31 @@ target = 'Response'
 X = df[features]
 y = df[target]
 
+# Encode categorical variables for training set
+X_encoded = pd.get_dummies(X, columns=['Education', 'Marital_Status'])
+
 # Fit GBM model on entire dataset
 try:
-    gbm_model.fit(X, y)
+    gbm_model.fit(X_encoded, y)
 except Exception as e:
     st.write(f"Error occurred during model training: {e}")
 
 if st.button('Predict'):
     # Ensure columns in input_df_encoded match the columns in X
-    missing_columns = set(X.columns) - set(input_df_encoded.columns)
+    missing_columns = set(X_encoded.columns) - set(input_df_encoded.columns)
     for col in missing_columns:
         input_df_encoded[col] = 0  # Add missing columns with default value 0
 
     # Reorder columns to match X
-    input_df_encoded = input_df_encoded[X.columns]
+    input_df_encoded = input_df_encoded[X_encoded.columns]
+
+    # Convert date input to days since the earliest date in the dataset, handle separately
+    if 'Dt_Customer' in input_df_encoded.columns:
+        min_date = df['Dt_Customer'].min()
+        input_df_encoded['Dt_Customer'] = (input_df_encoded['Dt_Customer'] - min_date).dt.days
 
     # Predict using GBM model
     try:
-        # Convert date input to days since the earliest date in the dataset
-        input_df_encoded['Dt_Customer'] = (input_df_encoded['Dt_Customer'] - df['Dt_Customer'].min()).dt.days
-
         prediction_gbm = gbm_model.predict(input_df_encoded)
         st.write(f'GBM Prediction: {prediction_gbm[0]}')
     except Exception as e:
