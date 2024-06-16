@@ -32,9 +32,6 @@ st.write("""
 This application predicts the likelihood of a customer responding to a marketing campaign.
 """)
 
-# Convert input data to DataFrame
-input_df = pd.DataFrame([input_data], columns=top_features, dtype=float)
-
 if st.button('Predict'):
     # Predict using GBM model
     prediction_gbm = gbm_model_selected.predict(input_df)
