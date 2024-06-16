@@ -43,6 +43,27 @@ def display_input_field(column_name):
     elif column_name in ['Kidhome', 'Teenhome']:
         st.write(f'Number of {column_name.lower()}')
         return st.selectbox(f'Enter {column_name}', options=kidteen_options)
+    elif column_name in ['MntWines', 'MntFruits', 'MntMeatProducts', 'MntFishProducts', 'MntSweetProducts', 'MntGoldProds', 'Income']:
+        st.write(f'Enter Amount (RM) for {column_name}')
+        return st.text_input(f'Enter {column_name}')
+    elif column_name == 'NumDealsPurchases':
+        st.write(f'Number of Deals Purchases, Enter Number (Integer)')
+        return st.number_input(f'Enter {column_name}', step=1, value=0)
+    elif column_name == 'NumWebPurchases':
+        st.write(f'Number of Web Purchases, Enter Number (Integer)')
+        return st.number_input(f'Enter {column_name}', step=1, value=0)
+    elif column_name == 'NumCatalogPurchases':
+        st.write(f'Number of Catalogue Purchases, Enter Number (Integer)')
+        return st.number_input(f'Enter {column_name}', step=1, value=0)
+    elif column_name == 'NumStorePurchases':
+        st.write(f'Number of Store Purchases, Enter Number (Integer)')
+        return st.number_input(f'Enter {column_name}', step=1, value=0)
+    elif column_name == 'NumWebVisitsMonth':
+        st.write(f'Number of Web Visit this Month, Enter Number (Integer)')
+        return st.number_input(f'Enter {column_name}', step=1, value=0)
+    elif column_name == 'Recency':
+        st.write(f'Number of Days Since Last Purchase')
+        return st.number_input(f'Enter {column_name}', step=1, value=0)
     else:
         st.write(f'Enter {column_name}')
         return st.text_input(f'Enter {column_name}')
