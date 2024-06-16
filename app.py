@@ -32,11 +32,6 @@ st.write("""
 This application predicts the likelihood of a customer responding to a marketing campaign.
 """)
 
-# Input features for prediction
-input_data = {}
-for feature in top_features:
-    input_data[feature] = st.text_input(f'Enter {feature}', '0')
-
 # Convert input data to DataFrame
 input_df = pd.DataFrame([input_data], columns=top_features, dtype=float)
 
