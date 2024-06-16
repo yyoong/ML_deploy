@@ -65,9 +65,15 @@ X = df[features]
 y = df[target]
 
 # Fit GBM model on entire dataset
-gbm_model.fit(X, y)
+try:
+    gbm_model.fit(X, y)
+except Exception as e:
+    st.write(f"Error occurred during model training: {e}")
 
 if st.button('Predict'):
     # Predict using GBM model
-    prediction_gbm = gbm_model.predict(input_df)
-    st.write(f'GBM Prediction: {prediction_gbm[0]}')
+    try:
+        prediction_gbm = gbm_model.predict(input_df)
+        st.write(f'GBM Prediction: {prediction_gbm[0]}')
+    except Exception as e:
+        st.write(f"Error occurred during prediction: {e}")
