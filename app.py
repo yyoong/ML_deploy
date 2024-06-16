@@ -95,6 +95,14 @@ except Exception as e:
     st.write(f"Error occurred during model training: {e}")
 
 if st.button('Predict'):
+    # Ensure columns in input_df_encoded match the columns in X
+    missing_columns = set(X.columns) - set(input_df_encoded.columns)
+    for col in missing_columns:
+        input_df_encoded[col] = 0  # Add missing columns with default value 0
+
+    # Reorder columns to match X
+    input_df_encoded = input_df_encoded[X.columns]
+
     # Predict using GBM model
     try:
         prediction_gbm = gbm_model.predict(input_df_encoded)
