@@ -35,7 +35,7 @@ This application predicts the likelihood of a customer responding to a marketing
 # Input features for prediction
 input_data = {}
 for feature in features:
-    input_data[feature] = st.text_input(f'Enter {feature}', '0')
+    input_data[feature] = st.text_input(f'Enter {feature}')
 
 # Convert input data to DataFrame
 input_df = pd.DataFrame([input_data], columns=features, dtype=float)
