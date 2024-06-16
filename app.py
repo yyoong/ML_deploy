@@ -55,6 +55,9 @@ for feature in df.columns:
 # Convert input data to DataFrame
 input_df = pd.DataFrame([input_data])
 
+# Encode categorical variables
+input_df_encoded = pd.get_dummies(input_df, columns=['Education', 'Marital_Status'])
+
 # Initialize GBM model
 gbm_model = GradientBoostingClassifier(n_estimators=100, random_state=42)
 
@@ -73,7 +76,7 @@ except Exception as e:
 if st.button('Predict'):
     # Predict using GBM model
     try:
-        prediction_gbm = gbm_model.predict(input_df)
+        prediction_gbm = gbm_model.predict(input_df_encoded)
         st.write(f'GBM Prediction: {prediction_gbm[0]}')
     except Exception as e:
         st.write(f"Error occurred during prediction: {e}")
