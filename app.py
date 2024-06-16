@@ -9,6 +9,9 @@ df = pd.read_excel('marketing_campaign.xlsx')
 # Remove columns not needed for input and prediction
 df.drop(['ID', 'Year_Birth', 'Z_CostContact', 'Z_Revenue'], axis=1, inplace=True)
 
+# Convert Dt_Customer to datetime
+df['Dt_Customer'] = pd.to_datetime(df['Dt_Customer'], format='%Y-%m-%d')
+
 # Dropdown options for Marital status, Education, Kidhome, Teenhome
 marital_status_options = ['Married', 'Together', 'Single', 'Divorced', 'Widow', 'Alone', 'YOLO', 'Absurd']
 education_options = ['Graduation', 'Master', 'PhD', '2n Cycle', 'Basic']
@@ -79,6 +82,12 @@ input_df = pd.DataFrame([input_data])
 # Encode categorical variables (Education and Marital_Status)
 input_df_encoded = pd.get_dummies(input_df, columns=['Education', 'Marital_Status'])
 
+# Convert Dt_Customer to days since earliest date
+if 'Dt_Customer' in input_df_encoded.columns:
+    input_df_encoded['Dt_Customer'] = pd.to_datetime(input_df_encoded['Dt_Customer'], format='%Y-%m-%d')
+    min_date = df['Dt_Customer'].min()
+    input_df_encoded['Dt_Customer'] = (input_df_encoded['Dt_Customer'] - min_date).dt.days
+
 # Initialize GBM model
 gbm_model = GradientBoostingClassifier(n_estimators=100, random_state=42)
 
@@ -90,6 +99,10 @@ y = df[target]
 
 # Encode categorical variables for training set
 X_encoded = pd.get_dummies(X, columns=['Education', 'Marital_Status'])
+
+# Convert Dt_Customer to days since earliest date
+if 'Dt_Customer' in X_encoded.columns:
+    X_encoded['Dt_Customer'] = (X_encoded['Dt_Customer'] - min_date).dt.days
 
 # Fit GBM model on entire dataset
 try:
@@ -105,11 +118,6 @@ if st.button('Predict'):
 
     # Reorder columns to match X
     input_df_encoded = input_df_encoded[X_encoded.columns]
-
-    # Convert date input to days since the earliest date in the dataset, handle separately
-    if 'Dt_Customer' in input_df_encoded.columns:
-        min_date = df['Dt_Customer'].min()
-        input_df_encoded['Dt_Customer'] = (input_df_encoded['Dt_Customer'] - min_date).dt.days
 
     # Predict using GBM model
     try:
