@@ -105,6 +105,9 @@ if st.button('Predict'):
 
     # Predict using GBM model
     try:
+        # Convert date input to days since the earliest date in the dataset
+        input_df_encoded['Dt_Customer'] = (input_df_encoded['Dt_Customer'] - df['Dt_Customer'].min()).dt.days
+
         prediction_gbm = gbm_model.predict(input_df_encoded)
         st.write(f'GBM Prediction: {prediction_gbm[0]}')
     except Exception as e:
