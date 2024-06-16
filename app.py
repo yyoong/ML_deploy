@@ -9,8 +9,10 @@ df = pd.read_excel('marketing_campaign.xlsx')
 # Remove columns not needed for input and prediction
 df.drop(['ID', 'Year_Birth', 'Z_CostContact', 'Z_Revenue'], axis=1, inplace=True)
 
-# Dropdown options for Marital status
+# Dropdown options for Marital status, Education, Kidhome, Teenhome
 marital_status_options = ['Married', 'Together', 'Single', 'Divorced', 'Widow', 'Alone', 'YOLO', 'Absurd']
+education_options = ['Graduation', 'Master', 'PhD', '2n Cycle', 'Basic']
+kidteen_options = [0, 1, 2]
 
 # Streamlit app
 st.title('Marketing Campaign Response Prediction')
@@ -35,6 +37,12 @@ def display_input_field(column_name):
     elif column_name == 'Marital_Status':
         st.write('Marital status')
         return st.selectbox(f'Enter {column_name}', options=marital_status_options)
+    elif column_name == 'Education':
+        st.write('Customer’s level of education')
+        return st.selectbox(f'Enter {column_name}', options=education_options)
+    elif column_name in ['Kidhome', 'Teenhome']:
+        st.write(f'Number of {column_name.lower()}')
+        return st.selectbox(f'Enter {column_name}', options=kidteen_options)
     else:
         st.write(f'Enter {column_name}')
         return st.text_input(f'Enter {column_name}')
