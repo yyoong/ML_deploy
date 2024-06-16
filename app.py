@@ -76,7 +76,7 @@ for feature in df.columns:
 # Convert input data to DataFrame
 input_df = pd.DataFrame([input_data])
 
-# Encode categorical variables
+# Encode categorical variables (Education and Marital_Status)
 input_df_encoded = pd.get_dummies(input_df, columns=['Education', 'Marital_Status'])
 
 # Initialize GBM model
